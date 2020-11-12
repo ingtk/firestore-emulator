@@ -1,8 +1,12 @@
-name: ci
+name: build-and-push-to-dockerhub
 
 on:
   push:
-    branches: master
+    branches: main
+
+env:
+  PORT: 8812
+  IMAGE_NAME: firestore-emulator
 
 jobs:
   main:
@@ -20,9 +24,9 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ingtk/firestore-emulator:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}:latest
           build-args: |
-            PORT=8812
+            PORT=${PORT}
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
